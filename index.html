@@ -166,12 +166,7 @@
 
         <div class="input-group">
             <label for="discountPercent">Discount Percentage (%)</label>
-            <input type="number" id="discountPercent" value="15" step="0.1" min="0" max="100">
-        </div>
-
-        <div class="input-group">
-            <label for="shippingCost">Shipping Cost ($)</label>
-            <input type="number" id="shippingCost" value="3" step="0.01" min="0">
+            <input type="number" id="discountPercent" value="10" step="0.1" min="0" max="100">
         </div>
 
         <div class="result-box">
@@ -185,12 +180,8 @@
                     <span id="calcAmazon">$0.00</span>
                 </div>
                 <div>
-                    <span id="calcDiscountLabel">Discount (15%):</span>
+                    <span id="calcDiscountLabel">Discount (10%):</span>
                     <span id="calcDiscount">-$0.00</span>
-                </div>
-                <div>
-                    <span>Shipping:</span>
-                    <span id="calcShipping">-$0.00</span>
                 </div>
                 <div>
                     <span>Final Price:</span>
@@ -207,19 +198,16 @@
     <script>
         const amazonPriceInput = document.getElementById('amazonPrice');
         const discountPercentInput = document.getElementById('discountPercent');
-        const shippingCostInput = document.getElementById('shippingCost');
         const temuPriceDisplay = document.getElementById('temuPrice');
         const calculationDetails = document.getElementById('calculationDetails');
 
         function calculatePrice() {
             const amazonPrice = parseFloat(amazonPriceInput.value) || 0;
             const discountPercent = parseFloat(discountPercentInput.value) || 0;
-            const shippingCost = parseFloat(shippingCostInput.value) || 0;
 
             if (amazonPrice > 0) {
                 const discountAmount = amazonPrice * (discountPercent / 100);
-                const temuPrice = amazonPrice - discountAmount - shippingCost;
-                const finalPrice = Math.max(0, temuPrice);
+                const finalPrice = Math.max(0, amazonPrice - discountAmount);
 
                 temuPriceDisplay.textContent = '$' + finalPrice.toFixed(2);
 
@@ -227,7 +215,6 @@
                 document.getElementById('calcAmazon').textContent = '$' + amazonPrice.toFixed(2);
                 document.getElementById('calcDiscountLabel').textContent = `Discount (${discountPercent}%):`;
                 document.getElementById('calcDiscount').textContent = '-$' + discountAmount.toFixed(2);
-                document.getElementById('calcShipping').textContent = '-$' + shippingCost.toFixed(2);
                 document.getElementById('calcFinal').textContent = '$' + finalPrice.toFixed(2);
                 
                 calculationDetails.style.display = 'block';
@@ -250,7 +237,6 @@
 
         amazonPriceInput.addEventListener('input', calculatePrice);
         discountPercentInput.addEventListener('input', calculatePrice);
-        shippingCostInput.addEventListener('input', calculatePrice);
 
         // Initial calculation
         calculatePrice();
